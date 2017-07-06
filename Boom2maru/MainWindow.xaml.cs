@@ -21,10 +21,12 @@ namespace Boom2maru
     public partial class MainWindow : Window
     {
         public bool isClosed = false;
+        private System.Diagnostics.Process[] processes = new System.Diagnostics.Process[] { };
 
         public MainWindow()
         {
             InitializeComponent();
+            ReloadProcesses();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -35,6 +37,22 @@ namespace Boom2maru
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void ReloadProcesses()
+        {
+            processes = System.Diagnostics.Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).ToArray();
+
+            processesCombobox.Items.Clear();
+            foreach (var p in processes)
+            {
+                processesCombobox.Items.Add(p.ProcessName);
+            }
+        }
+
+        private void ReloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReloadProcesses();
         }
     }
 }

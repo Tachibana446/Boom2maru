@@ -19,7 +19,7 @@
             <GroupBox Header="撮影対象のウィンドウ">
                 <StackPanel HorizontalAlignment="Left" MinWidth="100">
                     <ComboBox x:Name="processesCombobox" Margin="3"/>
-                    <Button Margin="3">更新</Button>
+                    <Button Margin="3" Click="ReloadButton_Click">更新</Button>
                 </StackPanel>
             </GroupBox>
             <Button Click="ExitButton_Click" HorizontalAlignment="Right" Padding="10,1" Margin="5,2">終了</Button>
