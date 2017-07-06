@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Boom2maru"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525"
+        Closed="Window_Closed">
     <Grid>
-        
+
+        <StackPanel>
+            <GroupBox Header="定期撮影のインターバル">
+                <StackPanel Orientation="Horizontal">
+                    <local:TimePicker x:Name="timePicker" Margin="5"/>
+                    <Button>決定</Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="撮影対象のウィンドウ">
+                <StackPanel HorizontalAlignment="Left" MinWidth="100">
+                    <ComboBox x:Name="processesCombobox" Margin="3"/>
+                    <Button Margin="3">更新</Button>
+                </StackPanel>
+            </GroupBox>
+            <Button Click="ExitButton_Click" HorizontalAlignment="Right" Padding="10,1" Margin="5,2">終了</Button>
+        </StackPanel>
     </Grid>
 </Window>

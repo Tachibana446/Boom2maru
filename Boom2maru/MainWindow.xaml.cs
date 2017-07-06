@@ -20,9 +20,21 @@ namespace Boom2maru
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool isClosed = false;
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            isClosed = true;
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
