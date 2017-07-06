@@ -26,6 +26,12 @@
                     <Button Margin="3" Click="ReloadButton_Click">更新</Button>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Header="保存先フォルダ">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="3" Width="400" TextWrapping="Wrap" Height="auto" x:Name="saveFolderTextBox"/>
+                    <Button Margin="3" Click="SaveFolderSelectButton_Click">参照</Button>
+                </StackPanel>
+            </GroupBox>
             <GroupBox Header="開始と停止">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="startButton" Width="100" HorizontalAlignment="Left" Margin="3" Height="20" VerticalAlignment="Bottom" Click="startButton_Click">開始</Button>

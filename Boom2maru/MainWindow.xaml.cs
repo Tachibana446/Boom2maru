@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace Boom2maru
         private System.Diagnostics.Process[] processes = new System.Diagnostics.Process[] { };
 
         public DispatcherTimer timer = null;
+
+        private static DirectoryInfo SaveDirectory = new DirectoryInfo("./ScreenShots");
+
         TimeSpan _interval = new TimeSpan(0, 0, 5);
         TimeSpan Interval
         {
@@ -58,6 +62,7 @@ namespace Boom2maru
             InitializeComponent();
             ReloadProcesses();
             nowIntervalTextBlock.Text = NowIntervalText;
+            saveFolderTextBox.Text = SaveDirectory.FullName;
         }
 
         public MainWindow(DispatcherTimer timer)
@@ -69,6 +74,7 @@ namespace Boom2maru
             startButton.IsEnabled = false;
             stopButton.IsEnabled = true;
             nowIntervalTextBlock.Text = NowIntervalText;
+            saveFolderTextBox.Text = SaveDirectory.FullName;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -119,9 +125,10 @@ namespace Boom2maru
                     return;
                 }
                 // 保存
+                if (!SaveDirectory.Exists) SaveDirectory.Create();
                 var image = WindowCapture.GetBitmapImage(targetProcess.MainWindowHandle);
                 if (image == null) return;
-                using (var fs = new FileStream($"./save/{GetNextFileNumber()}.png", FileMode.Create))
+                using (var fs = new FileStream($"{SaveDirectory.FullName}/{GetNextFileNumber()}.png", FileMode.Create))
                 {
                     var enc = new PngBitmapEncoder();
                     enc.Frames.Add(BitmapFrame.Create(image));
@@ -154,10 +161,10 @@ namespace Boom2maru
         private static int GetNextFileNumber()
         {
             int n = 0;
-            var dir = new DirectoryInfo("./save/");
-            foreach (var f in dir.GetFiles())
+            if (!SaveDirectory.Exists) return 1;
+            foreach (var f in SaveDirectory.GetFiles())
             {
-                var m = Regex.Match(f.Name, @"(\d+)\..*");
+                var m = Regex.Match(f.Name, @"(\d+)\.png");
                 if (m.Success)
                 {
                     int i = int.Parse(m.Groups[1].Value);
@@ -166,5 +173,17 @@ namespace Boom2maru
             }
             return n + 1;
         }
+
+        private void SaveFolderSelectButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                SaveDirectory = new DirectoryInfo(dialog.FileName);
+                saveFolderTextBox.Text = SaveDirectory.FullName;
+            }
+        }
+
     }
 }
