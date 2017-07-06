@@ -11,15 +11,25 @@
 
         <StackPanel>
             <GroupBox Header="定期撮影のインターバル">
-                <StackPanel Orientation="Horizontal">
-                    <local:TimePicker x:Name="timePicker" Margin="5"/>
-                    <Button>決定</Button>
+                <StackPanel>
+                    <TextBlock>現在のインターバル:</TextBlock>
+                    <TextBlock x:Name="nowIntervalTextBlock" Text="{Binding}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <local:TimePicker x:Name="timePicker" Margin="5"/>
+                        <Button Click="IntervalDecideButton_Click">決定</Button>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="撮影対象のウィンドウ">
                 <StackPanel HorizontalAlignment="Left" MinWidth="100">
                     <ComboBox x:Name="processesCombobox" Margin="3"/>
                     <Button Margin="3" Click="ReloadButton_Click">更新</Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="開始と停止">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="startButton" Width="100" HorizontalAlignment="Left" Margin="3" Height="20" VerticalAlignment="Bottom" Click="startButton_Click">開始</Button>
+                    <Button x:Name="stopButton" Width="100" Margin="3" Click="stopButton_Click" IsEnabled="False">停止</Button>
                 </StackPanel>
             </GroupBox>
             <Button Click="ExitButton_Click" HorizontalAlignment="Right" Padding="10,1" Margin="5,2">終了</Button>

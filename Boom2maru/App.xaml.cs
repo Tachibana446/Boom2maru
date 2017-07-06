@@ -28,6 +28,7 @@ namespace Boom2maru
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
+            notifyIcon.window?.timer?.Stop();
             this.notifyIcon.Dispose();
         }
     }

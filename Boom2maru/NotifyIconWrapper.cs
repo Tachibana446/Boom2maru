@@ -11,7 +11,7 @@ namespace Boom2maru
 {
     public partial class NotifyIconWrapper : Component
     {
-        private MainWindow window = null;
+        public MainWindow window = null;
 
         public NotifyIconWrapper()
         {
@@ -29,9 +29,13 @@ namespace Boom2maru
 
         private void OpenToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (window == null || window.isClosed)
+            if (window == null)
             {
                 window = new MainWindow();
+            }
+            else if (window.isClosed)
+            {
+                window = new MainWindow(window.timer);
             }
             window.Show();
         }

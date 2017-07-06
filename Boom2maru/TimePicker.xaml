@@ -15,7 +15,7 @@
         <StackPanel Orientation="Horizontal">
             <TextBox x:Name="textBox" FontSize="18" Width="50" TextAlignment="Center" VerticalContentAlignment="Center" LostFocus="TextBox_LostFocus"
                      >1</TextBox>
-            <ComboBox SelectedIndex="0" FontSize="18" VerticalContentAlignment="Center">
+            <ComboBox x:Name="comboBox" SelectedIndex="0" FontSize="18" VerticalContentAlignment="Center">
                 <ComboBoxItem>秒</ComboBoxItem>
                 <ComboBoxItem>分</ComboBoxItem>
             </ComboBox>

@@ -60,6 +60,16 @@ namespace Boom2maru
             }
         }
 
+        public TimeSpan GetTimeSpan()
+        {
+            if (!isCorrect)
+                throw new Exception("時刻の形式が正しくありません");
+            if (comboBox.SelectedIndex == 0)
+                return new TimeSpan(0, 0, NowCount);
+            else
+                return new TimeSpan(0, NowCount, 0);
+        }
+
         public TimePicker()
         {
             InitializeComponent();
