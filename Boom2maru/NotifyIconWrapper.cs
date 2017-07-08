@@ -46,5 +46,10 @@ namespace Boom2maru
 
             InitializeComponent();
         }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OpenToolStripMenuItem1_Click(this, new EventArgs());
+        }
     }
 }

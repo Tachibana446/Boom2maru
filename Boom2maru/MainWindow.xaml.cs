@@ -30,6 +30,7 @@ namespace Boom2maru
         public DispatcherTimer timer = null;
 
         private static DirectoryInfo SaveDirectory = new DirectoryInfo("./ScreenShots");
+        private static int FileFormatSelectedIndex = 0;
 
         TimeSpan _interval = new TimeSpan(0, 0, 5);
         TimeSpan Interval
@@ -57,24 +58,29 @@ namespace Boom2maru
             }
         }
 
-        public MainWindow()
+        public MainWindow(DispatcherTimer timer = null)
         {
-            InitializeComponent();
-            ReloadProcesses();
-            nowIntervalTextBlock.Text = NowIntervalText;
-            saveFolderTextBox.Text = SaveDirectory.FullName;
+            Init();
+            if (timer != null)
+            {
+                this.timer = timer;
+                this.Interval = timer.Interval;
+                startButton.IsEnabled = false;
+                stopButton.IsEnabled = true;
+                nowIntervalTextBlock.Text = NowIntervalText;
+            }
         }
 
-        public MainWindow(DispatcherTimer timer)
+        /// <summary>
+        /// コンストラクタで共通する処理
+        /// </summary>
+        private void Init()
         {
             InitializeComponent();
             ReloadProcesses();
-            this.timer = timer;
-            this.Interval = timer.Interval;
-            startButton.IsEnabled = false;
-            stopButton.IsEnabled = true;
             nowIntervalTextBlock.Text = NowIntervalText;
             saveFolderTextBox.Text = SaveDirectory.FullName;
+            fileFormatCombobox.SelectedIndex = FileFormatSelectedIndex;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -128,9 +134,16 @@ namespace Boom2maru
                 if (!SaveDirectory.Exists) SaveDirectory.Create();
                 var image = WindowCapture.GetBitmapImage(targetProcess.MainWindowHandle);
                 if (image == null) return;
-                using (var fs = new FileStream($"{SaveDirectory.FullName}/{GetNextFileNumber()}.png", FileMode.Create))
+                var extensions = new string[] { "png", "jpg" };
+                using (var fs = new FileStream($"{SaveDirectory.FullName}/{GetNextFileNumber()}.{extensions[fileFormatCombobox.SelectedIndex]}",
+                    FileMode.Create))
                 {
-                    var enc = new PngBitmapEncoder();
+                    BitmapEncoder enc;
+                    switch (fileFormatCombobox.SelectedIndex)
+                    {
+                        case 0: enc = new PngBitmapEncoder(); break;
+                        default: enc = new JpegBitmapEncoder(); break;
+                    }
                     enc.Frames.Add(BitmapFrame.Create(image));
                     enc.Save(fs);
                     fs.Close();
@@ -164,7 +177,7 @@ namespace Boom2maru
             if (!SaveDirectory.Exists) return 1;
             foreach (var f in SaveDirectory.GetFiles())
             {
-                var m = Regex.Match(f.Name, @"(\d+)\.png");
+                var m = Regex.Match(f.Name, @"(\d+)\.(png|jpg)");
                 if (m.Success)
                 {
                     int i = int.Parse(m.Groups[1].Value);
@@ -185,5 +198,12 @@ namespace Boom2maru
             }
         }
 
+        /// <summary>
+        /// ファイルフォーマットを変更した時
+        /// </summary>
+        private void fileFormatCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FileFormatSelectedIndex = fileFormatCombobox.SelectedIndex;
+        }
     }
 }
